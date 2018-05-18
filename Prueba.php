@@ -9,5 +9,6 @@
 	#print "hola";
 
 	print_r($model->raiz());
+	print_r($model->obtener_hojas());
 
 ?>
