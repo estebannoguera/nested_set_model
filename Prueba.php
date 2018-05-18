@@ -8,10 +8,11 @@
 
 	#print "hola";
 
-	print_r($model->raiz());
+	//print_r($model->raiz());
 
-	print_r($model->obtener_hojas());
+	//print_r($model->obtener_hojas());
 
-	echo 'casa';
+	//echo 'casa';
+	print_r($model->subArbol_por_nombre('TUBE'));
 
 ?>

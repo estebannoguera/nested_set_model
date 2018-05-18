@@ -9,7 +9,7 @@
 	abstract class  ModelDB{
 		private $connection;
 		private $table_name;
-		private $fields_validate = array('lft','rgt');
+		private $fields_validate = array('lft','rgt','name');
 
 		public function __construct($nombreTabla = null)
 		{
@@ -35,6 +35,7 @@
 
 				}else{
 
+					echo 'no';
 				}
 
 			}
@@ -49,7 +50,8 @@
 			$q->execute();
 			$table_fields = $q->fetchAll(PDO::FETCH_COLUMN);
 
-			 return count(array_intersect($this->fields_validate,$table_fields))>=count($this->fields_validate)? true: false;
+			//print_r(array_intersect($this->fields_validate,$table_fields));
+			 return count(array_intersect($this->fields_validate,$table_fields))==count($this->fields_validate)? true: false;
 
 		}//fin de verificar_estructura_tabla
 
@@ -68,6 +70,21 @@
 		public function raiz(){
 			$q = $this->connection->prepare("select * from ".$this->table_name." where lft = 1");
 
+			$q->execute();
+			$table_fields = $q->fetchAll();
+			return count($table_fields)> 0 ? $table_fields : false;
+		}
+
+		public function subArbol_por_nombre($nombre=''){
+			$q = $this->connection->prepare("SELECT node.name
+														FROM ".$this->table_name." AS node,
+        												".$this->table_name." AS parent
+														WHERE node.lft BETWEEN parent.lft AND parent.rgt
+        												AND parent.name = '".$nombre."'
+														ORDER BY node.lft");
+
+			 //print_r($q);
+			//exit;
 			$q->execute();
 			$table_fields = $q->fetchAll();
 			return count($table_fields)> 0 ? $table_fields : false;
